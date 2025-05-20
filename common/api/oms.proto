@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option go_package = "github.com/shimkek/common/api";
+
+package api;
+
+service OrderService {
+    rpc CreateOrder (CreateOrderRequest) returns (Order);
+   // rpc GetOrder (GetOrderRequest) returns (GetOrderResponse);
+   // rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderResponse);
+   // rpc DeleteOrder (DeleteOrderRequest) returns (DeleteOrderResponse);
+}
+
+message Order {
+    string order_id = 1;
+    string customer_id = 2;
+    repeated OrderItem items = 3;
+    string status = 4;
+}
+message OrderItem {
+    string product_id = 1;
+    string product_name = 2;
+    int32 quantity = 3;
+    double price = 4;
+}
+
+message CreateOrderRequest {
+    string customer_id = 1;
+    repeated OrderItem items = 2;
+}
