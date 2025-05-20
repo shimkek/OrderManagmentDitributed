@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net"
 
@@ -23,12 +22,10 @@ func main() {
 	}
 	defer l.Close()
 
-	NewGrpcHandler(grpcServer)
-
 	store := NewStore()
 	service := NewService(store)
 
-	service.CreateOrder(context.Background())
+	NewGrpcHandler(grpcServer, service)
 
 	log.Printf("gRPC Server starting on %s", grpcAddr)
 

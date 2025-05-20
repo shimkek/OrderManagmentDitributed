@@ -4,24 +4,28 @@ import (
 	"context"
 	"log"
 
-	pb "github.com/shimkek/omd-common/api"
+	"github.com/shimkek/omd-common/api"
 	"google.golang.org/grpc"
 )
 
 type grpcHandler struct {
-	pb.UnimplementedOrderServiceServer
+	api.UnimplementedOrderServiceServer
+
+	service OrderService
 }
 
-func NewGrpcHandler(grpcServer *grpc.Server) {
-	handler := &grpcHandler{}
-	pb.RegisterOrderServiceServer(grpcServer, handler)
+func NewGrpcHandler(grpcServer *grpc.Server, service OrderService) {
+	handler := &grpcHandler{service: service}
+	api.RegisterOrderServiceServer(grpcServer, handler)
 
 }
 
-func (h *grpcHandler) CreateOrder(ctx context.Context, r *pb.CreateOrderRequest) (*pb.Order, error) {
+func (h *grpcHandler) CreateOrder(ctx context.Context, r *api.CreateOrderRequest) (*api.Order, error) {
 	log.Println("CreateOrder gRPC handler called")
-	log.Printf("Order items: %v", r.Items)
-	o := &pb.Order{
-		OrderId: "123"}
+	h.service.ValidateOrder(ctx, r)
+	o := &api.Order{
+		OrderID: "123",
+		Items:   r.Items}
+	log.Printf("Order: %v", o)
 	return o, nil
 }

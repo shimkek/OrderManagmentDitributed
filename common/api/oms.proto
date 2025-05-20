@@ -12,19 +12,19 @@ service OrderService {
 }
 
 message Order {
-    string order_id = 1;
-    string customer_id = 2;
+    string orderID = 1;
+    string customerID = 2;
     repeated OrderItem items = 3;
     string status = 4;
 }
 message OrderItem {
-    string product_id = 1;
-    string product_name = 2;
+    string productID = 1;
+    string productName = 2;
     int32 quantity = 3;
     double price = 4;
 }
 
 message CreateOrderRequest {
-    string customer_id = 1;
+    string customerID = 1;
     repeated OrderItem items = 2;
 }

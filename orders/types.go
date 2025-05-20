@@ -1,9 +1,14 @@
 package main
 
-import "context"
+import (
+	"context"
+
+	"github.com/shimkek/omd-common/api"
+)
 
 type OrderService interface {
 	CreateOrder(context.Context) error
+	ValidateOrder(context.Context, *api.CreateOrderRequest) error
 }
 
 type OrdersStore interface {

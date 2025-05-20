@@ -23,8 +23,8 @@ const (
 
 type Order struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
-	CustomerId    string                 `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	OrderID       string                 `protobuf:"bytes,1,opt,name=orderID,proto3" json:"orderID,omitempty"`
+	CustomerID    string                 `protobuf:"bytes,2,opt,name=customerID,proto3" json:"customerID,omitempty"`
 	Items         []*OrderItem           `protobuf:"bytes,3,rep,name=items,proto3" json:"items,omitempty"`
 	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -61,16 +61,16 @@ func (*Order) Descriptor() ([]byte, []int) {
 	return file_api_oms_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Order) GetOrderId() string {
+func (x *Order) GetOrderID() string {
 	if x != nil {
-		return x.OrderId
+		return x.OrderID
 	}
 	return ""
 }
 
-func (x *Order) GetCustomerId() string {
+func (x *Order) GetCustomerID() string {
 	if x != nil {
-		return x.CustomerId
+		return x.CustomerID
 	}
 	return ""
 }
@@ -91,8 +91,8 @@ func (x *Order) GetStatus() string {
 
 type OrderItem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ProductId     string                 `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	ProductName   string                 `protobuf:"bytes,2,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
+	ProductID     string                 `protobuf:"bytes,1,opt,name=productID,proto3" json:"productID,omitempty"`
+	ProductName   string                 `protobuf:"bytes,2,opt,name=productName,proto3" json:"productName,omitempty"`
 	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -129,9 +129,9 @@ func (*OrderItem) Descriptor() ([]byte, []int) {
 	return file_api_oms_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *OrderItem) GetProductId() string {
+func (x *OrderItem) GetProductID() string {
 	if x != nil {
-		return x.ProductId
+		return x.ProductID
 	}
 	return ""
 }
@@ -159,7 +159,7 @@ func (x *OrderItem) GetPrice() float64 {
 
 type CreateOrderRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	CustomerId    string                 `protobuf:"bytes,1,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
+	CustomerID    string                 `protobuf:"bytes,1,opt,name=customerID,proto3" json:"customerID,omitempty"`
 	Items         []*OrderItem           `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -195,9 +195,9 @@ func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
 	return file_api_oms_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateOrderRequest) GetCustomerId() string {
+func (x *CreateOrderRequest) GetCustomerID() string {
 	if x != nil {
-		return x.CustomerId
+		return x.CustomerID
 	}
 	return ""
 }
@@ -213,22 +213,23 @@ var File_api_oms_proto protoreflect.FileDescriptor
 
 const file_api_oms_proto_rawDesc = "" +
 	"\n" +
-	"\rapi/oms.proto\x12\x03api\"\x81\x01\n" +
-	"\x05Order\x12\x19\n" +
-	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x1f\n" +
-	"\vcustomer_id\x18\x02 \x01(\tR\n" +
-	"customerId\x12$\n" +
-	"\x05items\x18\x03 \x03(\v2\x0e.api.OrderItemR\x05items\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\tR\x06status\"\x7f\n" +
-	"\tOrderItem\x12\x1d\n" +
+	"\rapi/oms.proto\x12\x03api\"\x7f\n" +
+	"\x05Order\x12\x18\n" +
+	"\aorderID\x18\x01 \x01(\tR\aorderID\x12\x1e\n" +
 	"\n" +
-	"product_id\x18\x01 \x01(\tR\tproductId\x12!\n" +
-	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12\x1a\n" +
+	"customerID\x18\x02 \x01(\tR\n" +
+	"customerID\x12$\n" +
+	"\x05items\x18\x03 \x03(\v2\x0e.api.OrderItemR\x05items\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\"}\n" +
+	"\tOrderItem\x12\x1c\n" +
+	"\tproductID\x18\x01 \x01(\tR\tproductID\x12 \n" +
+	"\vproductName\x18\x02 \x01(\tR\vproductName\x12\x1a\n" +
 	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x14\n" +
-	"\x05price\x18\x04 \x01(\x01R\x05price\"[\n" +
-	"\x12CreateOrderRequest\x12\x1f\n" +
-	"\vcustomer_id\x18\x01 \x01(\tR\n" +
-	"customerId\x12$\n" +
+	"\x05price\x18\x04 \x01(\x01R\x05price\"Z\n" +
+	"\x12CreateOrderRequest\x12\x1e\n" +
+	"\n" +
+	"customerID\x18\x01 \x01(\tR\n" +
+	"customerID\x12$\n" +
 	"\x05items\x18\x02 \x03(\v2\x0e.api.OrderItemR\x05items2B\n" +
 	"\fOrderService\x122\n" +
 	"\vCreateOrder\x12\x17.api.CreateOrderRequest\x1a\n" +
