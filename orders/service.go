@@ -17,19 +17,28 @@ func NewService(store OrdersStore) *service {
 	}
 }
 
-func (s *service) CreateOrder(ctx context.Context) error {
-	return nil
+func (s *service) CreateOrder(ctx context.Context, p *api.CreateOrderRequest) (*api.Order, error) {
+	validatedItems, err := s.ValidateOrder(ctx, p.Items)
+	if err != nil {
+		return nil, err
+	}
+	o := &api.Order{
+		OrderID:    "123",
+		CustomerID: p.CustomerID,
+		Items:      validatedItems,
+		Status:     "pending",
+	}
+	return o, nil
 }
 
-func (s *service) ValidateOrder(ctx context.Context, p *api.CreateOrderRequest) error {
-	if len(p.Items) == 0 {
-		return common.ErrNoItems
+func (s *service) ValidateOrder(ctx context.Context, items []*api.OrderItem) ([]*api.OrderItem, error) {
+	if len(items) == 0 {
+		return nil, common.ErrNoItems
 	}
-	p.Items = mergeOrderItems(p.Items)
-
+	validatedItems := mergeOrderItems(items)
+	return validatedItems, nil
 	// validate with stock service
 
-	return nil
 }
 
 func mergeOrderItems(items []*api.OrderItem) []*api.OrderItem {

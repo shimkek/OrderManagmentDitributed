@@ -94,7 +94,7 @@ type OrderItem struct {
 	ProductID     string                 `protobuf:"bytes,1,opt,name=productID,proto3" json:"productID,omitempty"`
 	ProductName   string                 `protobuf:"bytes,2,opt,name=productName,proto3" json:"productName,omitempty"`
 	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	Price         float64                `protobuf:"fixed64,4,opt,name=price,proto3" json:"price,omitempty"`
+	PriceID       string                 `protobuf:"bytes,4,opt,name=priceID,proto3" json:"priceID,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -150,11 +150,11 @@ func (x *OrderItem) GetQuantity() int32 {
 	return 0
 }
 
-func (x *OrderItem) GetPrice() float64 {
+func (x *OrderItem) GetPriceID() string {
 	if x != nil {
-		return x.Price
+		return x.PriceID
 	}
-	return 0
+	return ""
 }
 
 type CreateOrderRequest struct {
@@ -220,12 +220,12 @@ const file_api_oms_proto_rawDesc = "" +
 	"customerID\x18\x02 \x01(\tR\n" +
 	"customerID\x12$\n" +
 	"\x05items\x18\x03 \x03(\v2\x0e.api.OrderItemR\x05items\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\tR\x06status\"}\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\"\x81\x01\n" +
 	"\tOrderItem\x12\x1c\n" +
 	"\tproductID\x18\x01 \x01(\tR\tproductID\x12 \n" +
 	"\vproductName\x18\x02 \x01(\tR\vproductName\x12\x1a\n" +
-	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x14\n" +
-	"\x05price\x18\x04 \x01(\x01R\x05price\"Z\n" +
+	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x18\n" +
+	"\apriceID\x18\x04 \x01(\tR\apriceID\"Z\n" +
 	"\x12CreateOrderRequest\x12\x1e\n" +
 	"\n" +
 	"customerID\x18\x01 \x01(\tR\n" +

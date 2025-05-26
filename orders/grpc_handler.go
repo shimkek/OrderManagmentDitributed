@@ -26,10 +26,11 @@ func NewGrpcHandler(grpcServer *grpc.Server, service OrderService, ch *amqp.Chan
 
 func (h *grpcHandler) CreateOrder(ctx context.Context, r *api.CreateOrderRequest) (*api.Order, error) {
 	log.Println("CreateOrder gRPC handler called")
-	h.service.ValidateOrder(ctx, r)
-	o := &api.Order{
-		OrderID: "123",
-		Items:   r.Items}
+	o, err := h.service.CreateOrder(ctx, r)
+	if err != nil {
+		log.Printf("Failed to create order: %v", err)
+		return nil, err
+	}
 	log.Printf("Order:\n %v", o)
 
 	marshalledOrder, err := json.Marshal(o)
