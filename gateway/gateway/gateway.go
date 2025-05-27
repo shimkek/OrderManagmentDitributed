@@ -8,4 +8,5 @@ import (
 
 type OrdersGateway interface {
 	CreateOrder(context.Context, *api.CreateOrderRequest) (*api.Order, error)
+	GetOrder(context.Context, string) (*api.Order, error)
 }

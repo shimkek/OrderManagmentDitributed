@@ -17,10 +17,31 @@ type handler struct {
 func NewHandler(gateway gateway.OrdersGateway) *handler {
 	return &handler{gateway: gateway}
 }
-func (h *handler) registerRoutes(mux *http.ServeMux) error {
-	mux.HandleFunc("POST /api/customers/{customerID}/orders", h.HandleCreateOrder)
+func (h *handler) registerRoutes(mux *http.ServeMux) {
+	//static routes serving
+	mux.Handle("/", http.FileServer(http.Dir("public")))
 
-	return nil
+	mux.HandleFunc("POST /api/customers/{customerID}/orders", h.HandleCreateOrder)
+	mux.HandleFunc("GET /api/customers/{customerID}/orders/{orderID}", h.HandleGetOrder)
+}
+func (h *handler) HandleGetOrder(w http.ResponseWriter, r *http.Request) {
+	customerID := r.PathValue("customerID")
+	orderID := r.PathValue("orderID")
+	if customerID == "" || orderID == "" {
+		http.Error(w, "customerID and orderID are required", http.StatusBadRequest)
+		return
+	}
+
+	order, err := h.gateway.GetOrder(r.Context(), orderID)
+	if err != nil {
+		log.Print("failed to get order:", err)
+		common.WriteError(w, http.StatusInternalServerError, "failed to get order")
+		return
+	}
+	if err := common.WriteJson(w, http.StatusOK, &order); err != nil {
+		common.WriteError(w, http.StatusInternalServerError, "internal server error")
+		return
+	}
 }
 
 func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {

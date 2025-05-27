@@ -11,8 +11,7 @@ import (
 )
 
 var (
-	gatewayHTTPAddr   = common.EnvGetString("GATEWAY_HTTP_ADDR", "http://localhost:8080")
-	gatewaySuccessURL = fmt.Sprintf("%s/success.html", gatewayHTTPAddr)
+	gatewayHTTPAddr = common.EnvGetString("GATEWAY_HTTP_ADDR", "http://localhost:8080")
 )
 
 type StripeProcessor struct{}
@@ -30,10 +29,12 @@ func (s *StripeProcessor) CreatePaymentLink(order *api.Order) (string, error) {
 			Quantity: stripe.Int64(int64(item.Quantity)),
 		})
 	}
+	gatewaySuccessURL := fmt.Sprintf("%s/success.html?customerID=%s&orderID=%s", gatewayHTTPAddr, order.CustomerID, order.OrderID)
 	checkoutParams := &stripe.CheckoutSessionParams{
 		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
 		LineItems:  items,
 		SuccessURL: stripe.String(gatewaySuccessURL),
+		CancelURL:  stripe.String(fmt.Sprintf("%s/cancel.html", gatewayHTTPAddr)),
 	}
 	result, err := session.New(checkoutParams)
 	if err != nil {

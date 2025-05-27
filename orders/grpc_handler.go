@@ -24,6 +24,18 @@ func NewGrpcHandler(grpcServer *grpc.Server, service OrderService, ch *amqp.Chan
 
 }
 
+func (h *grpcHandler) GetOrder(ctx context.Context, r *api.GetOrderRequest) (*api.Order, error) {
+	log.Println("GetOrder gRPC handler called. OrderID: ", r.OrderID)
+	o, err := h.service.GetOrder(ctx, r)
+	if err != nil {
+		log.Printf("Failed to get order: %v", err)
+		return nil, err
+	}
+	log.Printf("Order:\n %v", o)
+
+	return o, nil
+}
+
 func (h *grpcHandler) CreateOrder(ctx context.Context, r *api.CreateOrderRequest) (*api.Order, error) {
 	log.Println("CreateOrder gRPC handler called")
 	o, err := h.service.CreateOrder(ctx, r)

@@ -44,9 +44,7 @@ func main() {
 	ordersGateway := gateway.NewGRPCGateway(registry)
 	handler := NewHandler(ordersGateway)
 
-	if err := handler.registerRoutes(mux); err != nil {
-		log.Fatal(err)
-	}
+	handler.registerRoutes(mux)
 
 	log.Printf("Server starting on %s", httpAddr)
 

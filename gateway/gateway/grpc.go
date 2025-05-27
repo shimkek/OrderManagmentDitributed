@@ -29,3 +29,16 @@ func (g *gateway) CreateOrder(ctx context.Context, r *api.CreateOrderRequest) (*
 		Items:      r.Items,
 	})
 }
+
+func (g *gateway) GetOrder(ctx context.Context, orderID string) (*api.Order, error) {
+	conn, err := discovery.ServiceConnection(ctx, "orders", g.registry)
+	if err != nil {
+		return &api.Order{}, err
+	}
+
+	client := api.NewOrderServiceClient(conn)
+
+	return client.GetOrder(ctx, &api.GetOrderRequest{
+		OrderID: orderID,
+	})
+}

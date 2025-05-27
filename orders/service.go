@@ -22,13 +22,14 @@ func (s *service) CreateOrder(ctx context.Context, p *api.CreateOrderRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	o := &api.Order{
-		OrderID:    "123",
+	return s.store.Create(ctx, &api.CreateOrderRequest{
 		CustomerID: p.CustomerID,
 		Items:      validatedItems,
-		Status:     "pending",
-	}
-	return o, nil
+	})
+}
+
+func (s *service) GetOrder(ctx context.Context, r *api.GetOrderRequest) (*api.Order, error) {
+	return s.store.Get(ctx, r.OrderID)
 }
 
 func (s *service) ValidateOrder(ctx context.Context, items []*api.OrderItem) ([]*api.OrderItem, error) {
