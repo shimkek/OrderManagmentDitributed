@@ -7,7 +7,7 @@ package api;
 service OrderService {
     rpc CreateOrder (CreateOrderRequest) returns (Order);
     rpc GetOrder (GetOrderRequest) returns (Order);
-   // rpc UpdateOrder (UpdateOrderRequest) returns (UpdateOrderResponse);
+    rpc UpdateOrder (Order) returns (Order);
    // rpc DeleteOrder (DeleteOrderRequest) returns (DeleteOrderResponse);
 }
 
@@ -16,6 +16,7 @@ message Order {
     string customerID = 2;
     repeated OrderItem items = 3;
     string status = 4;
+    string PaymentLink = 5;
 }
 message OrderItem {
     string productID = 1;

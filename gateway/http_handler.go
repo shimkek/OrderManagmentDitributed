@@ -71,7 +71,12 @@ func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 		common.WriteError(w, http.StatusInternalServerError, "failed to create order")
 		return
 	}
-	if err := common.WriteJson(w, http.StatusCreated, &order); err != nil {
+
+	res := &CreateOrderRequest{
+		Order:         order,
+		RedirectToURL: fmt.Sprintf("http://localhost:8080/success.html?customerID=%s&orderID=%s", order.CustomerID, order.OrderID),
+	}
+	if err := common.WriteJson(w, http.StatusCreated, res); err != nil {
 		common.WriteError(w, http.StatusInternalServerError, "internal server error")
 		return
 	}

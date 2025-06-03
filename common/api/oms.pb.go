@@ -27,6 +27,7 @@ type Order struct {
 	CustomerID    string                 `protobuf:"bytes,2,opt,name=customerID,proto3" json:"customerID,omitempty"`
 	Items         []*OrderItem           `protobuf:"bytes,3,rep,name=items,proto3" json:"items,omitempty"`
 	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
+	PaymentLink   string                 `protobuf:"bytes,5,opt,name=PaymentLink,proto3" json:"PaymentLink,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -85,6 +86,13 @@ func (x *Order) GetItems() []*OrderItem {
 func (x *Order) GetStatus() string {
 	if x != nil {
 		return x.Status
+	}
+	return ""
+}
+
+func (x *Order) GetPaymentLink() string {
+	if x != nil {
+		return x.PaymentLink
 	}
 	return ""
 }
@@ -257,14 +265,15 @@ var File_api_oms_proto protoreflect.FileDescriptor
 
 const file_api_oms_proto_rawDesc = "" +
 	"\n" +
-	"\rapi/oms.proto\x12\x03api\"\x7f\n" +
+	"\rapi/oms.proto\x12\x03api\"\xa1\x01\n" +
 	"\x05Order\x12\x18\n" +
 	"\aorderID\x18\x01 \x01(\tR\aorderID\x12\x1e\n" +
 	"\n" +
 	"customerID\x18\x02 \x01(\tR\n" +
 	"customerID\x12$\n" +
 	"\x05items\x18\x03 \x03(\v2\x0e.api.OrderItemR\x05items\x12\x16\n" +
-	"\x06status\x18\x04 \x01(\tR\x06status\"\x81\x01\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\x12 \n" +
+	"\vPaymentLink\x18\x05 \x01(\tR\vPaymentLink\"\x81\x01\n" +
 	"\tOrderItem\x12\x1c\n" +
 	"\tproductID\x18\x01 \x01(\tR\tproductID\x12 \n" +
 	"\vproductName\x18\x02 \x01(\tR\vproductName\x12\x1a\n" +
@@ -276,11 +285,14 @@ const file_api_oms_proto_rawDesc = "" +
 	"customerID\x12$\n" +
 	"\x05items\x18\x02 \x03(\v2\x0e.api.OrderItemR\x05items\"+\n" +
 	"\x0fGetOrderRequest\x12\x18\n" +
-	"\aorderID\x18\x01 \x01(\tR\aorderID2p\n" +
+	"\aorderID\x18\x01 \x01(\tR\aorderID2\x97\x01\n" +
 	"\fOrderService\x122\n" +
 	"\vCreateOrder\x12\x17.api.CreateOrderRequest\x1a\n" +
 	".api.Order\x12,\n" +
 	"\bGetOrder\x12\x14.api.GetOrderRequest\x1a\n" +
+	".api.Order\x12%\n" +
+	"\vUpdateOrder\x12\n" +
+	".api.Order\x1a\n" +
 	".api.OrderB\x1fZ\x1dgithub.com/shimkek/common/apib\x06proto3"
 
 var (
@@ -307,10 +319,12 @@ var file_api_oms_proto_depIdxs = []int32{
 	1, // 1: api.CreateOrderRequest.items:type_name -> api.OrderItem
 	2, // 2: api.OrderService.CreateOrder:input_type -> api.CreateOrderRequest
 	3, // 3: api.OrderService.GetOrder:input_type -> api.GetOrderRequest
-	0, // 4: api.OrderService.CreateOrder:output_type -> api.Order
-	0, // 5: api.OrderService.GetOrder:output_type -> api.Order
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
+	0, // 4: api.OrderService.UpdateOrder:input_type -> api.Order
+	0, // 5: api.OrderService.CreateOrder:output_type -> api.Order
+	0, // 6: api.OrderService.GetOrder:output_type -> api.Order
+	0, // 7: api.OrderService.UpdateOrder:output_type -> api.Order
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name

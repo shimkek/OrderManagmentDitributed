@@ -128,21 +128,21 @@
     const response = await fetch(`/api/customers/${customerID}/orders/${orderID}`);
 
     const data = await response.json();
-    if (data.Status === 'waiting_payment') {
-      order.Status = 'Your order is waiting for payment...';
+    if (data.status === 'waiting_payment') {
+      order.status = 'Your order is waiting for payment...';
       document.getElementById('orderStatus').innerText = order.Status;
 
       // show payment popup
       document.querySelector('.payment-popup').style.display = 'block';
       document.getElementById('payment-link').href = data.PaymentLink;
     }
-    if (data.Status === 'paid') {
-      order.Status = 'Your order has been paid for. Please way while its being prepared...';
+    if (data.status === 'paid') {
+      order.status = 'Your order has been paid for. Please way while its being prepared...';
       document.getElementById('orderStatus').innerText = order.Status;
 
       setTimeout(poolOrderStatus, 5000);
-    } else if (data.Status === 'ready') {
-      order.Status = 'ready';
+    } else if (data.status === 'ready') {
+      order.status = 'ready';
 
       // close payment popup
       document.querySelector('.payment-popup').style.display = 'none';

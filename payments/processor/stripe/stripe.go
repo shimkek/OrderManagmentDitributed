@@ -6,8 +6,8 @@ import (
 
 	common "github.com/shimkek/omd-common"
 	"github.com/shimkek/omd-common/api"
-	"github.com/stripe/stripe-go/v78"
-	"github.com/stripe/stripe-go/v78/checkout/session"
+	"github.com/stripe/stripe-go/v82"
+	"github.com/stripe/stripe-go/v82/checkout/session"
 )
 
 var (
@@ -31,6 +31,10 @@ func (s *StripeProcessor) CreatePaymentLink(order *api.Order) (string, error) {
 	}
 	gatewaySuccessURL := fmt.Sprintf("%s/success.html?customerID=%s&orderID=%s", gatewayHTTPAddr, order.CustomerID, order.OrderID)
 	checkoutParams := &stripe.CheckoutSessionParams{
+		Metadata: map[string]string{
+			"OrderID":    order.OrderID,
+			"CustomerID": order.CustomerID,
+		},
 		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
 		LineItems:  items,
 		SuccessURL: stripe.String(gatewaySuccessURL),

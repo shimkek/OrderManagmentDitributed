@@ -32,6 +32,11 @@ func (s *service) GetOrder(ctx context.Context, r *api.GetOrderRequest) (*api.Or
 	return s.store.Get(ctx, r.OrderID)
 }
 
+func (s *service) UpdateOrder(ctx context.Context, o *api.Order) (*api.Order, error) {
+	s.store.Update(ctx, o.OrderID, o)
+	return o, nil
+}
+
 func (s *service) ValidateOrder(ctx context.Context, items []*api.OrderItem) ([]*api.OrderItem, error) {
 	if len(items) == 0 {
 		return nil, common.ErrNoItems

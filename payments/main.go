@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"net"
+	"net/http"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -11,8 +12,9 @@ import (
 	"github.com/shimkek/omd-common/broker"
 	"github.com/shimkek/omd-common/discovery"
 	"github.com/shimkek/omd-common/discovery/consul"
+	"github.com/shimkek/omd-payments/gateway"
 	StripeProcessor "github.com/shimkek/omd-payments/processor/stripe"
-	"github.com/stripe/stripe-go/v78"
+	"github.com/stripe/stripe-go/v82"
 	"google.golang.org/grpc"
 )
 
@@ -25,6 +27,8 @@ var (
 	amqpHost     = common.EnvGetString("RABBITMQ_HOST", "localhost")
 	amqpPort     = common.EnvGetString("RABBITMQ_PORT", "5672")
 	stripeKey    = common.EnvGetString("STRIPE_KEY", "")
+	httpAddr     = common.EnvGetString("PAYMENTS_HTTP_ADDR", "localhost:8081")
+	stripeSecret = common.EnvGetString("STRIPE_WEBHOOK_SECRET", "")
 )
 
 func main() {
@@ -58,12 +62,27 @@ func main() {
 		ch.Close()
 	}()
 
+	gateway := gateway.NewGRPCGateway(registry)
+
 	stripeProcessor := StripeProcessor.NewProcessor()
-	service := NewService(stripeProcessor)
+	service := NewService(stripeProcessor, gateway)
 
 	amqpConsumer := NewConsumer(service)
 	go amqpConsumer.Listen(ch)
 
+	//http server
+	mux := http.NewServeMux()
+
+	httpServer := NewPaymentHTTPHandler(ch)
+	httpServer.registerRoutes(mux)
+
+	go func() {
+		log.Printf("Starting http server on %s", httpAddr)
+		if err := http.ListenAndServe(httpAddr, mux); err != nil {
+			log.Fatal("failed to serve http server")
+		}
+	}()
+	//grpc server
 	grpcServer := grpc.NewServer()
 
 	l, err := net.Listen("tcp", grpcAddr)
