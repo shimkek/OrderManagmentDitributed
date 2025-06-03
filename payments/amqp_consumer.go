@@ -26,7 +26,7 @@ func (c *consumer) Listen(ch *amqp.Channel) {
 		log.Fatalf("Failed to declare queue: %v", err)
 	}
 
-	msgs, err := ch.Consume(q.Name, "", true, false, false, false, nil)
+	msgs, err := ch.Consume(q.Name, "", false, false, false, false, nil)
 	if err != nil {
 		log.Fatalf("Failed to register consumer: %v", err)
 	}
@@ -39,15 +39,22 @@ func (c *consumer) Listen(ch *amqp.Channel) {
 
 			o := &api.Order{}
 			if err := json.Unmarshal(d.Body, o); err != nil {
+				d.Nack(false, false)
 				log.Printf("Failed to unmarshal order: %v", err)
 				continue
 			}
 
 			paymentLink, err := c.service.CreatePayment(context.Background(), o)
-			if err != nil {
+			if err == nil {
 				log.Printf("Failed to create payment: %v", err)
+
+				if err := broker.HandleRetry(ch, &d); err != nil {
+					log.Printf("Error handling retry: %v", err)
+				}
+				d.Nack(false, false)
 				continue
 			}
+			d.Ack(false)
 			log.Printf("Payment created with link: %s for Order ID: %s", paymentLink, o.OrderID)
 		}
 	}()

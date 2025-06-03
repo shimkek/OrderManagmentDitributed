@@ -65,6 +65,9 @@ func main() {
 
 	NewGrpcHandler(grpcServer, service, ch)
 
+	consumer := NewConsumer(service)
+	go consumer.Listen(ch)
+
 	log.Printf("gRPC Server starting on %s", grpcAddr)
 
 	if err := grpcServer.Serve(l); err != nil {
