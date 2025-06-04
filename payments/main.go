@@ -29,15 +29,20 @@ var (
 	stripeKey    = common.EnvGetString("STRIPE_KEY", "")
 	httpAddr     = common.EnvGetString("PAYMENTS_HTTP_ADDR", "localhost:8081")
 	stripeSecret = common.EnvGetString("STRIPE_WEBHOOK_SECRET", "")
+	jaegerAddr   = common.EnvGetString("JAEGER_ADDR", "localhost:4318")
 )
 
 func main() {
+	ctx := context.Background()
+	if err := common.SetGlobalTracer(ctx, serviceName, jaegerAddr); err != nil {
+		log.Fatal("failed to set global tracer")
+	}
+
 	registry, err := consul.NewRegistry(consulAddr)
 	if err != nil {
 		log.Fatal("failed to create registry:", err)
 	}
 
-	ctx := context.Background()
 	instanceID := discovery.GenreateInstanceID(serviceName)
 	if err := registry.RegisterService(ctx, instanceID, serviceName, "localhost", 2000); err != nil {
 		log.Fatal("failed to register payments service:", err)

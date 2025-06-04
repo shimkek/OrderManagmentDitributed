@@ -21,15 +21,20 @@ var (
 	amqpPassword = common.EnvGetString("RABBITMQ_PASSWORD", "guest")
 	amqpHost     = common.EnvGetString("RABBITMQ_HOST", "localhost")
 	amqpPort     = common.EnvGetString("RABBITMQ_PORT", "5672")
+	jaegerAddr   = common.EnvGetString("JAEGER_ADDR", "localhost:4318")
 )
 
 func main() {
+	ctx := context.Background()
+	if err := common.SetGlobalTracer(ctx, serviceName, jaegerAddr); err != nil {
+		log.Fatal("failed to set global tracer")
+	}
+
 	registry, err := consul.NewRegistry(consulAddr)
 	if err != nil {
 		log.Fatal("failed to create registry:", err)
 	}
 
-	ctx := context.Background()
 	instanceID := discovery.GenreateInstanceID(serviceName)
 	if err := registry.RegisterService(ctx, instanceID, serviceName, "localhost", 2000); err != nil {
 		log.Fatal("failed to register ordera service:", err)

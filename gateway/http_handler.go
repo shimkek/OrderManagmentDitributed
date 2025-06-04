@@ -8,6 +8,7 @@ import (
 	common "github.com/shimkek/omd-common"
 	"github.com/shimkek/omd-common/api"
 	"github.com/shimkek/omd-gateway/gateway"
+	"go.opentelemetry.io/otel"
 )
 
 type handler struct {
@@ -31,8 +32,11 @@ func (h *handler) HandleGetOrder(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "customerID and orderID are required", http.StatusBadRequest)
 		return
 	}
+	tr := otel.Tracer("http")
+	ctx, span := tr.Start(r.Context(), fmt.Sprintf("%s %s", r.Method, r.RequestURI))
+	defer span.End()
 
-	order, err := h.gateway.GetOrder(r.Context(), orderID)
+	order, err := h.gateway.GetOrder(ctx, orderID)
 	if err != nil {
 		log.Print("failed to get order:", err)
 		common.WriteError(w, http.StatusInternalServerError, "failed to get order")
@@ -56,13 +60,16 @@ func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 		common.WriteError(w, http.StatusBadRequest, "invalid request body")
 		return
 	}
+	tr := otel.Tracer("http")
+	ctx, span := tr.Start(r.Context(), fmt.Sprintf("%s %s", r.Method, r.RequestURI))
+	defer span.End()
 
 	if err := validateItems(items); err != nil {
 		common.WriteError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	order, err := h.gateway.CreateOrder(r.Context(), &api.CreateOrderRequest{
+	order, err := h.gateway.CreateOrder(ctx, &api.CreateOrderRequest{
 		CustomerID: customerID,
 		Items:      items,
 	})
