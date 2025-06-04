@@ -9,6 +9,7 @@ import (
 	"github.com/shimkek/omd-common/api"
 	"github.com/shimkek/omd-gateway/gateway"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/codes"
 )
 
 type handler struct {
@@ -38,6 +39,7 @@ func (h *handler) HandleGetOrder(w http.ResponseWriter, r *http.Request) {
 
 	order, err := h.gateway.GetOrder(ctx, orderID)
 	if err != nil {
+		span.SetStatus(codes.Error, err.Error())
 		log.Print("failed to get order:", err)
 		common.WriteError(w, http.StatusInternalServerError, "failed to get order")
 		return
@@ -74,6 +76,7 @@ func (h *handler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 		Items:      items,
 	})
 	if err != nil {
+		span.SetStatus(codes.Error, err.Error())
 		log.Print("failed to create order:", err)
 		common.WriteError(w, http.StatusInternalServerError, "failed to create order")
 		return

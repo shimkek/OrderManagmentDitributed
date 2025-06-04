@@ -37,6 +37,7 @@ func (h *grpcHandler) GetOrder(ctx context.Context, r *api.GetOrderRequest) (*ap
 }
 
 func (h *grpcHandler) CreateOrder(ctx context.Context, r *api.CreateOrderRequest) (*api.Order, error) {
+
 	log.Println("CreateOrder gRPC handler called")
 	o, err := h.service.CreateOrder(ctx, r)
 	if err != nil {

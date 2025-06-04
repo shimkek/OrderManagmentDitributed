@@ -67,10 +67,11 @@ func main() {
 
 	store := NewStore()
 	service := NewService(store)
+	svcWithTelemtry := NewTelemetryMiddleware(service)
 
-	NewGrpcHandler(grpcServer, service, ch)
+	NewGrpcHandler(grpcServer, svcWithTelemtry, ch)
 
-	consumer := NewConsumer(service)
+	consumer := NewConsumer(svcWithTelemtry)
 	go consumer.Listen(ch)
 
 	log.Printf("gRPC Server starting on %s", grpcAddr)
