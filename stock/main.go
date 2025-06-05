@@ -3,20 +3,21 @@ package main
 import (
 	"context"
 	"net"
+	"strconv"
+	"strings"
 	"time"
 
 	common "github.com/shimkek/omd-common"
 	"github.com/shimkek/omd-common/broker"
 	"github.com/shimkek/omd-common/discovery"
 	"github.com/shimkek/omd-common/discovery/consul"
-	"github.com/shimkek/omd-orders/gateway"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
 var (
-	serviceName  = "orders"
-	grpcAddr     = common.EnvGetString("GRPC_ADDR", "localhost:2000")
+	serviceName  = "stock"
+	grpcAddr     = common.EnvGetString("GRPC_ADDR", "localhost:2002")
 	consulAddr   = common.EnvGetString("CONSUL_ADDR", "localhost:8500")
 	amqpUser     = common.EnvGetString("RABBITMQ_USER", "guest")
 	amqpPassword = common.EnvGetString("RABBITMQ_PASSWORD", "guest")
@@ -42,8 +43,13 @@ func main() {
 	}
 
 	instanceID := discovery.GenreateInstanceID(serviceName)
-	if err := registry.RegisterService(ctx, instanceID, serviceName, "localhost", 2000); err != nil {
-		logger.Fatal("failed to register ordera service:", zap.Error(err))
+	addr := strings.Split(grpcAddr, ":")
+	port, err := strconv.Atoi(addr[1])
+	if err != nil {
+		logger.Fatal("failed to parse port:", zap.Error(err))
+	}
+	if err := registry.RegisterService(ctx, instanceID, serviceName, addr[0], port); err != nil {
+		logger.Fatal("failed to register stock service:", zap.Error(err))
 	}
 
 	go func() {
@@ -72,14 +78,12 @@ func main() {
 	defer l.Close()
 
 	store := NewStore()
-	stockGateway := gateway.NewGateway(registry)
-	service := NewService(store, stockGateway)
+	service := NewService(store)
 	svcWithTelemetry := NewTelemetryMiddleware(service)
-	svcWithLogging := NewLoggingMiddleware(svcWithTelemetry)
 
-	NewGrpcHandler(grpcServer, svcWithLogging, ch)
+	NewGrpcHandler(grpcServer, svcWithTelemetry, ch)
 
-	consumer := NewConsumer(svcWithLogging)
+	consumer := NewConsumer(svcWithTelemetry)
 	go consumer.Listen(ch)
 
 	logger.Info("gRPC Server starting", zap.String("address", grpcAddr))

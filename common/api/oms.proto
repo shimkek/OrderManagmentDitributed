@@ -11,6 +11,25 @@ service OrderService {
    // rpc DeleteOrder (DeleteOrderRequest) returns (DeleteOrderResponse);
 }
 
+service StockService {
+    rpc CheckIfItemsAreInStock(CheckIfItemsAreInStockRequest) returns (CheckIfItemsAreInStockResponse);
+    rpc GetItems (GetItemsRequest) returns (GetItemsResponse);
+}
+
+message CheckIfItemsAreInStockRequest {
+    repeated OrderItem Items = 1;
+}
+
+message CheckIfItemsAreInStockResponse {
+    bool InStock = 1;
+    repeated OrderItem Items = 2;
+}
+message GetItemsRequest {
+    repeated string ItemIDs = 1;
+}
+message GetItemsResponse {
+    repeated OrderItem Items = 1;
+}
 message Order {
     string orderID = 1;
     string customerID = 2;

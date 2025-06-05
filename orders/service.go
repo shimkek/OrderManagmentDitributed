@@ -5,15 +5,18 @@ import (
 
 	common "github.com/shimkek/omd-common"
 	"github.com/shimkek/omd-common/api"
+	"github.com/shimkek/omd-orders/gateway"
 )
 
 type service struct {
-	store OrdersStore
+	store   OrdersStore
+	gateway gateway.StockGateway
 }
 
-func NewService(store OrdersStore) *service {
+func NewService(store OrdersStore, gateway gateway.StockGateway) *service {
 	return &service{
-		store: store,
+		store:   store,
+		gateway: gateway,
 	}
 }
 
@@ -41,10 +44,17 @@ func (s *service) ValidateOrder(ctx context.Context, items []*api.OrderItem) ([]
 	if len(items) == 0 {
 		return nil, common.ErrNoItems
 	}
-	validatedItems := mergeOrderItems(items)
-	return validatedItems, nil
-	// validate with stock service
+	mergedItems := mergeOrderItems(items)
 
+	inStock, items, err := s.gateway.CheckIfItemsAreInStock(ctx, mergedItems)
+	if err != nil {
+		return nil, err
+	}
+	if !inStock {
+		return nil, common.ErrNotInStock
+	}
+
+	return items, nil
 }
 
 func mergeOrderItems(items []*api.OrderItem) []*api.OrderItem {

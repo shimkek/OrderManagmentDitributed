@@ -25,7 +25,7 @@ func (s *StripeProcessor) CreatePaymentLink(order *api.Order) (string, error) {
 	items := make([]*stripe.CheckoutSessionLineItemParams, 0, len(order.Items))
 	for _, item := range order.Items {
 		items = append(items, &stripe.CheckoutSessionLineItemParams{
-			Price:    stripe.String("price_1RT6Lg07x6KdXnTOdZW6J5rc"),
+			Price:    stripe.String(item.PriceID),
 			Quantity: stripe.Int64(int64(item.Quantity)),
 		})
 	}

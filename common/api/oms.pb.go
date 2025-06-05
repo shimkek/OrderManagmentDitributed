@@ -21,6 +21,190 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type CheckIfItemsAreInStockRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []*OrderItem           `protobuf:"bytes,1,rep,name=Items,proto3" json:"Items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CheckIfItemsAreInStockRequest) Reset() {
+	*x = CheckIfItemsAreInStockRequest{}
+	mi := &file_api_oms_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckIfItemsAreInStockRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckIfItemsAreInStockRequest) ProtoMessage() {}
+
+func (x *CheckIfItemsAreInStockRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_oms_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckIfItemsAreInStockRequest.ProtoReflect.Descriptor instead.
+func (*CheckIfItemsAreInStockRequest) Descriptor() ([]byte, []int) {
+	return file_api_oms_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *CheckIfItemsAreInStockRequest) GetItems() []*OrderItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type CheckIfItemsAreInStockResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InStock       bool                   `protobuf:"varint,1,opt,name=InStock,proto3" json:"InStock,omitempty"`
+	Items         []*OrderItem           `protobuf:"bytes,2,rep,name=Items,proto3" json:"Items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CheckIfItemsAreInStockResponse) Reset() {
+	*x = CheckIfItemsAreInStockResponse{}
+	mi := &file_api_oms_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckIfItemsAreInStockResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckIfItemsAreInStockResponse) ProtoMessage() {}
+
+func (x *CheckIfItemsAreInStockResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_oms_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckIfItemsAreInStockResponse.ProtoReflect.Descriptor instead.
+func (*CheckIfItemsAreInStockResponse) Descriptor() ([]byte, []int) {
+	return file_api_oms_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *CheckIfItemsAreInStockResponse) GetInStock() bool {
+	if x != nil {
+		return x.InStock
+	}
+	return false
+}
+
+func (x *CheckIfItemsAreInStockResponse) GetItems() []*OrderItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
+type GetItemsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ItemIDs       []string               `protobuf:"bytes,1,rep,name=ItemIDs,proto3" json:"ItemIDs,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetItemsRequest) Reset() {
+	*x = GetItemsRequest{}
+	mi := &file_api_oms_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetItemsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetItemsRequest) ProtoMessage() {}
+
+func (x *GetItemsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_oms_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetItemsRequest.ProtoReflect.Descriptor instead.
+func (*GetItemsRequest) Descriptor() ([]byte, []int) {
+	return file_api_oms_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetItemsRequest) GetItemIDs() []string {
+	if x != nil {
+		return x.ItemIDs
+	}
+	return nil
+}
+
+type GetItemsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Items         []*OrderItem           `protobuf:"bytes,1,rep,name=Items,proto3" json:"Items,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetItemsResponse) Reset() {
+	*x = GetItemsResponse{}
+	mi := &file_api_oms_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetItemsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetItemsResponse) ProtoMessage() {}
+
+func (x *GetItemsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_oms_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetItemsResponse.ProtoReflect.Descriptor instead.
+func (*GetItemsResponse) Descriptor() ([]byte, []int) {
+	return file_api_oms_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetItemsResponse) GetItems() []*OrderItem {
+	if x != nil {
+		return x.Items
+	}
+	return nil
+}
+
 type Order struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrderID       string                 `protobuf:"bytes,1,opt,name=orderID,proto3" json:"orderID,omitempty"`
@@ -34,7 +218,7 @@ type Order struct {
 
 func (x *Order) Reset() {
 	*x = Order{}
-	mi := &file_api_oms_proto_msgTypes[0]
+	mi := &file_api_oms_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +230,7 @@ func (x *Order) String() string {
 func (*Order) ProtoMessage() {}
 
 func (x *Order) ProtoReflect() protoreflect.Message {
-	mi := &file_api_oms_proto_msgTypes[0]
+	mi := &file_api_oms_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +243,7 @@ func (x *Order) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Order.ProtoReflect.Descriptor instead.
 func (*Order) Descriptor() ([]byte, []int) {
-	return file_api_oms_proto_rawDescGZIP(), []int{0}
+	return file_api_oms_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Order) GetOrderID() string {
@@ -109,7 +293,7 @@ type OrderItem struct {
 
 func (x *OrderItem) Reset() {
 	*x = OrderItem{}
-	mi := &file_api_oms_proto_msgTypes[1]
+	mi := &file_api_oms_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -121,7 +305,7 @@ func (x *OrderItem) String() string {
 func (*OrderItem) ProtoMessage() {}
 
 func (x *OrderItem) ProtoReflect() protoreflect.Message {
-	mi := &file_api_oms_proto_msgTypes[1]
+	mi := &file_api_oms_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -134,7 +318,7 @@ func (x *OrderItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderItem.ProtoReflect.Descriptor instead.
 func (*OrderItem) Descriptor() ([]byte, []int) {
-	return file_api_oms_proto_rawDescGZIP(), []int{1}
+	return file_api_oms_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *OrderItem) GetProductID() string {
@@ -175,7 +359,7 @@ type CreateOrderRequest struct {
 
 func (x *CreateOrderRequest) Reset() {
 	*x = CreateOrderRequest{}
-	mi := &file_api_oms_proto_msgTypes[2]
+	mi := &file_api_oms_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -187,7 +371,7 @@ func (x *CreateOrderRequest) String() string {
 func (*CreateOrderRequest) ProtoMessage() {}
 
 func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_oms_proto_msgTypes[2]
+	mi := &file_api_oms_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -200,7 +384,7 @@ func (x *CreateOrderRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrderRequest) Descriptor() ([]byte, []int) {
-	return file_api_oms_proto_rawDescGZIP(), []int{2}
+	return file_api_oms_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CreateOrderRequest) GetCustomerID() string {
@@ -226,7 +410,7 @@ type GetOrderRequest struct {
 
 func (x *GetOrderRequest) Reset() {
 	*x = GetOrderRequest{}
-	mi := &file_api_oms_proto_msgTypes[3]
+	mi := &file_api_oms_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +422,7 @@ func (x *GetOrderRequest) String() string {
 func (*GetOrderRequest) ProtoMessage() {}
 
 func (x *GetOrderRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_oms_proto_msgTypes[3]
+	mi := &file_api_oms_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +435,7 @@ func (x *GetOrderRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrderRequest.ProtoReflect.Descriptor instead.
 func (*GetOrderRequest) Descriptor() ([]byte, []int) {
-	return file_api_oms_proto_rawDescGZIP(), []int{3}
+	return file_api_oms_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetOrderRequest) GetOrderID() string {
@@ -265,7 +449,16 @@ var File_api_oms_proto protoreflect.FileDescriptor
 
 const file_api_oms_proto_rawDesc = "" +
 	"\n" +
-	"\rapi/oms.proto\x12\x03api\"\xa1\x01\n" +
+	"\rapi/oms.proto\x12\x03api\"E\n" +
+	"\x1dCheckIfItemsAreInStockRequest\x12$\n" +
+	"\x05Items\x18\x01 \x03(\v2\x0e.api.OrderItemR\x05Items\"`\n" +
+	"\x1eCheckIfItemsAreInStockResponse\x12\x18\n" +
+	"\aInStock\x18\x01 \x01(\bR\aInStock\x12$\n" +
+	"\x05Items\x18\x02 \x03(\v2\x0e.api.OrderItemR\x05Items\"+\n" +
+	"\x0fGetItemsRequest\x12\x18\n" +
+	"\aItemIDs\x18\x01 \x03(\tR\aItemIDs\"8\n" +
+	"\x10GetItemsResponse\x12$\n" +
+	"\x05Items\x18\x01 \x03(\v2\x0e.api.OrderItemR\x05Items\"\xa1\x01\n" +
 	"\x05Order\x12\x18\n" +
 	"\aorderID\x18\x01 \x01(\tR\aorderID\x12\x1e\n" +
 	"\n" +
@@ -293,7 +486,10 @@ const file_api_oms_proto_rawDesc = "" +
 	".api.Order\x12%\n" +
 	"\vUpdateOrder\x12\n" +
 	".api.Order\x1a\n" +
-	".api.OrderB\x1fZ\x1dgithub.com/shimkek/common/apib\x06proto3"
+	".api.Order2\xaa\x01\n" +
+	"\fStockService\x12a\n" +
+	"\x16CheckIfItemsAreInStock\x12\".api.CheckIfItemsAreInStockRequest\x1a#.api.CheckIfItemsAreInStockResponse\x127\n" +
+	"\bGetItems\x12\x14.api.GetItemsRequest\x1a\x15.api.GetItemsResponseB\x1fZ\x1dgithub.com/shimkek/common/apib\x06proto3"
 
 var (
 	file_api_oms_proto_rawDescOnce sync.Once
@@ -307,27 +503,38 @@ func file_api_oms_proto_rawDescGZIP() []byte {
 	return file_api_oms_proto_rawDescData
 }
 
-var file_api_oms_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_api_oms_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_api_oms_proto_goTypes = []any{
-	(*Order)(nil),              // 0: api.Order
-	(*OrderItem)(nil),          // 1: api.OrderItem
-	(*CreateOrderRequest)(nil), // 2: api.CreateOrderRequest
-	(*GetOrderRequest)(nil),    // 3: api.GetOrderRequest
+	(*CheckIfItemsAreInStockRequest)(nil),  // 0: api.CheckIfItemsAreInStockRequest
+	(*CheckIfItemsAreInStockResponse)(nil), // 1: api.CheckIfItemsAreInStockResponse
+	(*GetItemsRequest)(nil),                // 2: api.GetItemsRequest
+	(*GetItemsResponse)(nil),               // 3: api.GetItemsResponse
+	(*Order)(nil),                          // 4: api.Order
+	(*OrderItem)(nil),                      // 5: api.OrderItem
+	(*CreateOrderRequest)(nil),             // 6: api.CreateOrderRequest
+	(*GetOrderRequest)(nil),                // 7: api.GetOrderRequest
 }
 var file_api_oms_proto_depIdxs = []int32{
-	1, // 0: api.Order.items:type_name -> api.OrderItem
-	1, // 1: api.CreateOrderRequest.items:type_name -> api.OrderItem
-	2, // 2: api.OrderService.CreateOrder:input_type -> api.CreateOrderRequest
-	3, // 3: api.OrderService.GetOrder:input_type -> api.GetOrderRequest
-	0, // 4: api.OrderService.UpdateOrder:input_type -> api.Order
-	0, // 5: api.OrderService.CreateOrder:output_type -> api.Order
-	0, // 6: api.OrderService.GetOrder:output_type -> api.Order
-	0, // 7: api.OrderService.UpdateOrder:output_type -> api.Order
-	5, // [5:8] is the sub-list for method output_type
-	2, // [2:5] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	5,  // 0: api.CheckIfItemsAreInStockRequest.Items:type_name -> api.OrderItem
+	5,  // 1: api.CheckIfItemsAreInStockResponse.Items:type_name -> api.OrderItem
+	5,  // 2: api.GetItemsResponse.Items:type_name -> api.OrderItem
+	5,  // 3: api.Order.items:type_name -> api.OrderItem
+	5,  // 4: api.CreateOrderRequest.items:type_name -> api.OrderItem
+	6,  // 5: api.OrderService.CreateOrder:input_type -> api.CreateOrderRequest
+	7,  // 6: api.OrderService.GetOrder:input_type -> api.GetOrderRequest
+	4,  // 7: api.OrderService.UpdateOrder:input_type -> api.Order
+	0,  // 8: api.StockService.CheckIfItemsAreInStock:input_type -> api.CheckIfItemsAreInStockRequest
+	2,  // 9: api.StockService.GetItems:input_type -> api.GetItemsRequest
+	4,  // 10: api.OrderService.CreateOrder:output_type -> api.Order
+	4,  // 11: api.OrderService.GetOrder:output_type -> api.Order
+	4,  // 12: api.OrderService.UpdateOrder:output_type -> api.Order
+	1,  // 13: api.StockService.CheckIfItemsAreInStock:output_type -> api.CheckIfItemsAreInStockResponse
+	3,  // 14: api.StockService.GetItems:output_type -> api.GetItemsResponse
+	10, // [10:15] is the sub-list for method output_type
+	5,  // [5:10] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_api_oms_proto_init() }
@@ -341,9 +548,9 @@ func file_api_oms_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_oms_proto_rawDesc), len(file_api_oms_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_api_oms_proto_goTypes,
 		DependencyIndexes: file_api_oms_proto_depIdxs,
