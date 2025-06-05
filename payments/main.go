@@ -71,8 +71,9 @@ func main() {
 
 	stripeProcessor := StripeProcessor.NewProcessor()
 	service := NewService(stripeProcessor, gateway)
+	svcWithTelemetry := NewTelemetryMiddleware(service)
 
-	amqpConsumer := NewConsumer(service)
+	amqpConsumer := NewConsumer(svcWithTelemetry)
 	go amqpConsumer.Listen(ch)
 
 	//http server
