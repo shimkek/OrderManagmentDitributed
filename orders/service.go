@@ -25,14 +25,31 @@ func (s *service) CreateOrder(ctx context.Context, p *api.CreateOrderRequest) (*
 	if err != nil {
 		return nil, err
 	}
-	return s.store.Create(ctx, &api.CreateOrderRequest{
-		CustomerID: p.CustomerID,
-		Items:      validatedItems,
+	id, err := s.store.Create(ctx, Order{
+		CustomerID:  p.CustomerID,
+		Items:       validatedItems,
+		Status:      "pending",
+		PaymentLink: "none",
 	})
+	if err != nil {
+		return nil, err
+	}
+	return &api.Order{
+		OrderID:     id.Hex(),
+		CustomerID:  p.CustomerID,
+		Items:       validatedItems,
+		Status:      "pending",
+		PaymentLink: "none",
+	}, nil
 }
 
 func (s *service) GetOrder(ctx context.Context, r *api.GetOrderRequest) (*api.Order, error) {
-	return s.store.Get(ctx, r.OrderID)
+	order, err := s.store.Get(ctx, r.OrderID)
+	if err != nil {
+		return nil, err
+	}
+	return order.ToProto(), nil
+
 }
 
 func (s *service) UpdateOrder(ctx context.Context, o *api.Order) (*api.Order, error) {

@@ -141,8 +141,8 @@
       document.getElementById('orderStatus').innerText = order.status;
 
       setTimeout(poolOrderStatus, 5000);
-    } else if (data.status === 'ready') {
-      order.status = 'ready';
+    } else if (data.status === 'ready for pick-up') {
+      order.status = 'ready for pick-up';
 
       // close payment popup
       document.querySelector('.payment-popup').style.display = 'none';
@@ -150,7 +150,7 @@
       // show ready popup
       document.querySelector('.ready-popup').style.display = 'block';
       document.getElementById('orderID').innerText = orderID;
-      document.getElementById('orderStatus').innerText = order.Status;
+      document.getElementById('orderStatus').innerText = order.status;
     } else {
       setTimeout(poolOrderStatus, 5000);
     }

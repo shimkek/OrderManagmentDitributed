@@ -2,34 +2,29 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net"
+	"strconv"
+	"strings"
 	"time"
 
 	common "github.com/shimkek/omd-common"
 	"github.com/shimkek/omd-common/broker"
 	"github.com/shimkek/omd-common/discovery"
 	"github.com/shimkek/omd-common/discovery/consul"
-	"github.com/shimkek/omd-orders/gateway"
-	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.mongodb.org/mongo-driver/v2/mongo/options"
-	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
+	"github.com/shimkek/omd-kitchen/gateway"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
 var (
-	serviceName  = "orders"
-	grpcAddr     = common.EnvGetString("GRPC_ADDR", "localhost:2000")
+	serviceName  = "kitchen"
+	grpcAddr     = common.EnvGetString("GRPC_ADDR", "localhost:2003")
 	consulAddr   = common.EnvGetString("CONSUL_ADDR", "localhost:8500")
 	amqpUser     = common.EnvGetString("RABBITMQ_USER", "guest")
 	amqpPassword = common.EnvGetString("RABBITMQ_PASSWORD", "guest")
 	amqpHost     = common.EnvGetString("RABBITMQ_HOST", "localhost")
 	amqpPort     = common.EnvGetString("RABBITMQ_PORT", "5672")
 	jaegerAddr   = common.EnvGetString("JAEGER_ADDR", "localhost:4318")
-	mongoUser    = common.EnvGetString("MONGO_USER", "root")
-	mongoPass    = common.EnvGetString("MONGO_PASS", "example")
-	mongoAddr    = common.EnvGetString("MONGO_HOST", "localhost:27017")
 )
 
 func main() {
@@ -49,8 +44,13 @@ func main() {
 	}
 
 	instanceID := discovery.GenreateInstanceID(serviceName)
-	if err := registry.RegisterService(ctx, instanceID, serviceName, "localhost", 2000); err != nil {
-		logger.Fatal("failed to register ordera service:", zap.Error(err))
+	addr := strings.Split(grpcAddr, ":")
+	port, err := strconv.Atoi(addr[1])
+	if err != nil {
+		logger.Fatal("failed to parse port:", zap.Error(err))
+	}
+	if err := registry.RegisterService(ctx, instanceID, serviceName, addr[0], port); err != nil {
+		logger.Fatal("failed to register service:", zap.Error(err))
 	}
 
 	go func() {
@@ -70,12 +70,6 @@ func main() {
 		ch.Close()
 	}()
 
-	mongoURI := fmt.Sprintf("mongodb://%s:%s@%s", mongoUser, mongoPass, mongoAddr)
-	db, err := connectToMongoDB(mongoURI)
-	if err != nil {
-		logger.Fatal("failed to connect to MongoDB:", zap.Error(err))
-	}
-
 	grpcServer := grpc.NewServer()
 
 	l, err := net.Listen("tcp", grpcAddr)
@@ -84,15 +78,8 @@ func main() {
 	}
 	defer l.Close()
 
-	store := NewStore(db)
-	stockGateway := gateway.NewGateway(registry)
-	service := NewService(store, stockGateway)
-	svcWithTelemetry := NewTelemetryMiddleware(service)
-	svcWithLogging := NewLoggingMiddleware(svcWithTelemetry)
-
-	NewGrpcHandler(grpcServer, svcWithLogging, ch)
-
-	consumer := NewConsumer(svcWithLogging)
+	gateway := gateway.NewGRPCGateway(registry)
+	consumer := NewConsumer(gateway)
 	go consumer.Listen(ch)
 
 	logger.Info("gRPC Server starting", zap.String("address", grpcAddr))
@@ -100,19 +87,4 @@ func main() {
 	if err := grpcServer.Serve(l); err != nil {
 		logger.Fatal(err.Error())
 	}
-}
-
-func connectToMongoDB(uri string) (*mongo.Client, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
-	defer cancel()
-
-	client, err := mongo.Connect(options.Client().ApplyURI(uri))
-	if err != nil {
-		return nil, err
-	}
-	err = client.Ping(ctx, readpref.Primary())
-	if err != nil {
-		return nil, err
-	}
-	return client, nil
 }
